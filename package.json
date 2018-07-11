@@ -1,0 +1,20 @@
+{
+  "name": "node-crypto",
+  "version": "1.0.0",
+  "description": "Node crypto client",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Paul Fitzgerald",
+  "dependencies": {
+    "cfonts": "^2.1.3",
+    "chalk": "^2.4.1",
+    "cli-table3": "^0.5.0",
+    "got": "^8.3.2"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "bin": {
+    "node-gif": "index.js"
+  }
+}
