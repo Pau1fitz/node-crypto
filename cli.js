@@ -3,6 +3,7 @@ const got = require('got')
 const CFonts = require('cfonts')
 const chalk = require('chalk')
 const Table = require('cli-table3')
+const inquirer = require('inquirer')
 const { version } = require('./package.json')
 
 CFonts.say('node crypto', {
@@ -17,6 +18,8 @@ CFonts.say('node crypto', {
 
 
 const currencies = [];
+const currencyList = [];
+
 const getCrypto = async () => {
   try {
     const response = await got('https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=id');
@@ -40,10 +43,29 @@ const getCrypto = async () => {
         table.push(
           [chalk.green(currency.name), chalk.cyan(currency.abbr), chalk.cyan(currency.supply),`${chalk.cyan(currency.sevenDay)}${chalk.cyan('%')}`, `${chalk.cyan('$')}${chalk.cyan(currency.price)}`]
         );
-      })  
+
+        currencyList.push(`${currency.name} - ${currency.price}`)
+      }) 
+      
       
       // render table
       console.log(table.toString());
+
+      console.log(currencyList)
+
+
+      inquirer
+      .prompt([
+        {
+          type: 'list',
+          name: 'theme',
+          message: 'Choose a cryptocurrency?',
+          choices: currencyList
+        }
+      ])
+      .then(answers => {
+        console.log(JSON.stringify(answers, null, '  '));
+      });
     } catch (error) {
         console.log(error.response.body);
     }
