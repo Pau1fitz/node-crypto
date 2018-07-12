@@ -1,6 +1,6 @@
 {
   "name": "node-cryptocurrency",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node crypto client",
   "main": "index.js",
   "license": "MIT",
@@ -19,6 +19,6 @@
   },
   "preferGlobal": true,
   "bin": {
-    "node-crypto": "index.js"
+    "node-crypto": "cli.js"
   }
 }
