@@ -10,12 +10,14 @@
     "chalk": "^2.4.1",
     "cli-table3": "^0.5.0",
     "got": "^8.3.2",
-    "inquirer": "^6.0.0"
+    "inquirer": "^6.0.0",
+    "log-symbols": "^2.2.0",
+    "ora": "^2.1.0"
   },
   "engines": {
     "node": ">=8"
   },
   "bin": {
-    "node-gif": "index.js"
+    "node-crypto": "index.js"
   }
 }

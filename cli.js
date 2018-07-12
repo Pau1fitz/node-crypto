@@ -4,68 +4,117 @@ const CFonts = require('cfonts')
 const chalk = require('chalk')
 const Table = require('cli-table3')
 const inquirer = require('inquirer')
+const ora = require('ora')
+const logSymbols = require('log-symbols')
 const { version } = require('./package.json')
 
 CFonts.say('node crypto', {
-	font: 'chrome',              // define the font face
-	align: 'left',              // define text alignment
-	colors: ['cyanBright','greenBright','white'],         // define all colors
-	background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
-	letterSpacing: 1,           // define letter spacing
-	lineHeight: 1,              // define the line height
-	space: true,                // define if the output text should have empty lines on top and on the bottom
+	font: 'chrome',
+	align: 'left',
+	colors: ['cyanBright','greenBright','white'],
+	background: 'transparent',
+	letterSpacing: 1,
+	lineHeight: 1,
+	space: true,
 })
 
+const spinner = ora({
+  spinner: 'circleHalves',
+  text: '🌎  Fetching currencies....',
+  interval: 100
+})
 
-const currencies = [];
-const currencyList = [];
+spinner.start()
+const currencyList = []
 
 const getCrypto = async () => {
   try {
-    const response = await got('https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=id');
-      let parsedResponse = JSON.parse(response.body).data;
+    const response = await got('https://api.coinmarketcap.com/v2/listings/?limit=10&sort=id');
+      spinner.succeed()
+      let parsedResponse = JSON.parse(response.body).data
       Object.values(parsedResponse).forEach(currency => {
-        currencies.push({
-          name: currency.name,
-          abbr: currency.symbol,
-          supply: currency.total_supply,
-          sevenDay: currency.quotes.USD.percent_change_7d,
-          price: currency.quotes.USD.price
-        })  
+        currencyList.push(`${currency.id} - ${chalk.bold(currency.name)} - ${currency.symbol}`)
       })
+
+      inquirer.prompt([{
+        type: 'list',
+        name: 'theme',
+        message: '💰  Choose a cryptocurrency?',
+        choices: currencyList
+      }]).then(answers => {
         
-      const table = new Table({
-        style: {head: ['yellow']},
-        head: ['Name', 'Abbr', 'Supply', '7 day',  'Value']
-      });
-      
-      currencies.forEach(currency => {
+        const spinner = ora({
+          spinner: 'circleHalves',
+          text: '🚚  Delivering currency....',
+          interval: 100
+        })
+
+        spinner.start()
+
+        const id = answers.theme.split(' ')[0];
+        (async () => {
+          
+          const response = await got(`https://api.coinmarketcap.com/v2/ticker/${id}/`);
+          let parsedResponse = JSON.parse(response.body).data
+          let maxSupply =  parsedResponse.max_supply === null ? '0' : parsedResponse.max_supply
+          let sevenDay = parsedResponse.quotes.USD.percent_change_7d === null ? '0' : `${parsedResponse.quotes.USD.percent_change_7d}%`
+
+          let currency = [
+            chalk.cyan(parsedResponse.name),
+            chalk.cyan(parsedResponse.symbol),
+            chalk.cyan(parsedResponse.rank),
+            chalk.cyan(parsedResponse.total_supply),
+            chalk.cyan(maxSupply),
+            chalk.cyan(sevenDay),
+            chalk.cyan(`$${parsedResponse.quotes.USD.price}`)
+          ]
+
+          spinner.succeed()
+
+          const table = new Table({
+            chars: {
+              'top': '═', 
+              'top-mid': '╤', 
+              'top-left': '╔', 
+              'top-right': '╗',
+              'bottom': '═', 
+              'bottom-mid': '╧',
+              'bottom-left': '╚', 
+              'bottom-right': '╝', 
+              'left': '║', 
+              'left-mid': '╟',
+              'right': '║', 
+              'right-mid': '╢'
+            },
+            style: {
+              head: ['yellow'],
+              border: ['cyan']
+            },
+            head: ['Name', 'Symbol', 'Rank', 'Total Supply', 'Max Supply', 'Seven Day Change', 'Price']
+        });
+        
+        // table is an Array, so you can `push`, `unshift`, `splice` and friends
         table.push(
-          [chalk.green(currency.name), chalk.cyan(currency.abbr), chalk.cyan(currency.supply),`${chalk.cyan(currency.sevenDay)}${chalk.cyan('%')}`, `${chalk.cyan('$')}${chalk.cyan(currency.price)}`]
+            currency
         );
 
-        currencyList.push(`${currency.name} - ${currency.price}`)
-      }) 
-      
-      
-      // render table
-      console.log(table.toString());
+        console.log(`${logSymbols.success} 💵  Show me the money....`)
 
-      console.log(currencyList)
+        CFonts.say(parsedResponse.name, {
+          font: 'chrome',
+          align: 'left',
+          colors: ['cyanBright','greenBright','white'],
+          background: 'transparent',
+          letterSpacing: 1,
+          lineHeight: 1,
+          space: true,
+        })
 
-
-      inquirer
-      .prompt([
-        {
-          type: 'list',
-          name: 'theme',
-          message: 'Choose a cryptocurrency?',
-          choices: currencyList
-        }
-      ])
-      .then(answers => {
-        console.log(JSON.stringify(answers, null, '  '));
+        
+        console.log(table.toString());    
+        })()
       });
+
     } catch (error) {
         console.log(error.response.body);
     }
