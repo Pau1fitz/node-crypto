@@ -1,5 +1,5 @@
 {
-  "name": "node-crypto",
+  "name": "node-cryptocurrency",
   "version": "1.0.0",
   "description": "Node crypto client",
   "main": "index.js",
@@ -17,6 +17,7 @@
   "engines": {
     "node": ">=8"
   },
+  "preferGlobal": true,
   "bin": {
     "node-crypto": "index.js"
   }
