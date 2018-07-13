@@ -2,7 +2,7 @@
 
 > Check cryptocurrency information in the terminal
 
-<img src="https://raw.githubusercontent.com/pau1fitz/node-crypto/master/crypto.gif">
+<img src="https://raw.githubusercontent.com/pau1fitz/node-crypto/master/node-crypto.gif">
 
 ## Install
 
