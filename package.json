@@ -1,6 +1,6 @@
 {
   "name": "node-cryptocurrency",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Node crypto client",
   "main": "index.js",
   "license": "MIT",
