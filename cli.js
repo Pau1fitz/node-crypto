@@ -91,27 +91,30 @@ const getCrypto = async () => {
               border: ['cyan']
             },
             head: ['Name', 'Symbol', 'Rank', 'Total Supply', 'Max Supply', 'Seven Day Change', 'Price']
-        });
+          });
         
-        // table is an Array, so you can `push`, `unshift`, `splice` and friends
-        table.push(
+          // table is an Array, so you can `push`, `unshift`, `splice` and friends
+          table.push(
             currency
-        );
+          );
 
-        console.log(`${logSymbols.success} 💵  Show me the money....`)
+          console.log(`${logSymbols.success} 💵  Show me the money....`)
 
-        CFonts.say(parsedResponse.name, {
-          font: 'chrome',
-          align: 'left',
-          colors: ['cyanBright','greenBright','white'],
-          background: 'transparent',
-          letterSpacing: 1,
-          lineHeight: 1,
-          space: true,
-        })
+          CFonts.say(parsedResponse.name, {
+            font: 'chrome',
+            align: 'left',
+            colors: ['cyanBright','greenBright','white'],
+            background: 'transparent',
+            letterSpacing: 1,
+            lineHeight: 1,
+            space: true,
+          })
 
         
-        console.log(table.toString());    
+          console.log(table.toString())
+
+          getCrypto()
+
         })()
       });
 
