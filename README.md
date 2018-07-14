@@ -1,6 +1,6 @@
 # node-crypto
 
-> Check cryptocurrency information in the terminal
+> Check cryptocurrency information and prices in the terminal.
 
 <img src="https://raw.githubusercontent.com/pau1fitz/node-crypto/master/node-crypto.gif">
 
